@@ -1,0 +1,93 @@
+#include<cs50.h>
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+
+int keycheck(string a);
+int shift(char a);
+
+int main(int argc, string argv[])
+{
+    if (argc == 2)
+    {
+        string key = argv[1];
+
+        int verkey = keycheck(key);
+        if (verkey == 1)
+        {
+            string text = get_string("type your palintext here : ");
+            if (!text)
+            {
+                return 1;
+            }
+
+            printf("ciphertext: ");
+            
+            int i, j, k, l;
+            for (i = 0, j = 0, k = strlen(key), l = strlen(text); i < l; i++) 
+            {
+                if (isalpha(text[i]))
+                {
+                    int c_key = shift((key[j % k]));
+                    int c_char; 
+                    if (isupper(text[i]))
+                    {
+                        c_char = ((text[i] - 65) + c_key) % 26 ;
+                        c_char = 65 + c_char;    
+                    }
+                    else
+                    {
+                        c_char = ((text[i] - 97) + c_key) % 26 ;
+                        c_char = 97 + c_char;
+                    }
+                    printf("%c", c_char);
+                    j++;
+                }
+                else
+                { 
+                    printf("%c", text[i]);
+                }
+            }
+            printf("\n");
+        }
+        else
+        {
+            printf("Usage: ./vigenere keyword\n");
+            return 1;
+        }
+    }
+    else
+    {
+        printf("Usage: ./vigenere keyword\n"); 
+        return 1;
+    }
+    printf("\n");
+}
+
+
+int keycheck(string a)
+{
+    int verkey = 1;
+    for (int i = 0, n = strlen(a); i < n; i++)
+    {
+        if (! isalpha(a[i]))
+        {
+            verkey = 0;
+        }
+    }
+    return verkey ;
+}
+
+int shift(char a)
+{
+    int c;
+    if (isupper(a))
+    {
+        c = a - 65;
+    }
+    else
+    {
+        c = a - 97;
+    }
+    return c;
+}
